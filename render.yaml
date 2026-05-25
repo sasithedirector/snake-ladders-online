@@ -3,7 +3,7 @@ services:
     name: snake-ladders-online
     env: node
     plan: free
-    buildCommand: "(cd client && npm install && npx vite build) && (cd backend && npm install --production)"
+    buildCommand: "cd client && npm install && npm run build && cd ../backend && npm install --production"
     startCommand: "node backend/src/server.js"
     healthCheckPath: /api/health
     autoDeploy: true
