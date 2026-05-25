@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "Online multiplayer Snake and Ladders game",
   "scripts": {
-    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "install:all": "cd backend && npm install && cd ../client && npm install",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && npm run dev",
-    "client": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
     "start": "cd backend && npm start",
-    "render-build": "(cd frontend && npm install && npx vite build) && (cd backend && npm install --production)"
+    "render-build": "(cd client && npm install && npx vite build) && (cd backend && npm install --production)"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

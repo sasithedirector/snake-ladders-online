@@ -54,7 +54,7 @@ snake-ladders-online/
 │   ├── .env                    # Environment variables
 │   ├── .env.example            # Example environment file
 │   └── package.json
-├── frontend/
+├── client/
 │   ├── src/
 │   │   ├── main.jsx            # React entry point
 │   │   ├── App.jsx             # Root component with routing

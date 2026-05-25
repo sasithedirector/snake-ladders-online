@@ -50,7 +50,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
+  const frontendPath = path.join(__dirname, '..', 'client', 'dist');
   app.use(express.static(frontendPath));
   // Don't interfere with API routes
   app.get(/^\/(?!api|socket\.io).*/, (req, res) => {
