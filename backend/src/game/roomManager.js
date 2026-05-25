@@ -314,5 +314,6 @@ module.exports = {
   deleteRoom,
   getPublicRooms,
   cleanupStaleRooms,
-  rooms
+  rooms,
+  playerSocketMap
 };
