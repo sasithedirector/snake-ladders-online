@@ -5,7 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
 
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+dotenv.config({ path: path.join(__dirname, '..', '.env'), override: false });
 
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
@@ -67,9 +67,10 @@ const PORT = process.env.PORT || 5000;
 const start = async () => {
   try {
     await connectDB();
-    server.listen(PORT, () => {
+    server.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log(`MongoDB: ${process.env.MONGODB_URI ? 'URI set' : 'URI NOT SET'}`);
     });
   } catch (err) {
     console.error('Failed to start server:', err);
