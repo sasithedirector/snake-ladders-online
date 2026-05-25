@@ -1,5 +1,8 @@
+const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+
+const router = express.Router();
 
 // In-memory user store
 const users = new Map();
@@ -37,7 +40,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 // POST /api/auth/register
-async function register(req, res) {
+router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -50,7 +53,6 @@ async function register(req, res) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    // Check duplicates
     for (const user of users.values()) {
       if (user.email === email.toLowerCase()) {
         return res.status(400).json({ error: 'Email already in use' });
@@ -70,14 +72,9 @@ async function register(req, res) {
       email: email.toLowerCase(),
       password: passwordHash,
       stats: {
-        gamesPlayed: 0,
-        gamesWon: 0,
-        gamesLost: 0,
-        totalDiceRolls: 0,
-        laddersClimbed: 0,
-        snakesBitten: 0,
-        winStreak: 0,
-        bestWinStreak: 0
+        gamesPlayed: 0, gamesWon: 0, gamesLost: 0,
+        totalDiceRolls: 0, laddersClimbed: 0, snakesBitten: 0,
+        winStreak: 0, bestWinStreak: 0
       },
       createdAt: new Date().toISOString()
     };
@@ -87,21 +84,16 @@ async function register(req, res) {
     const token = generateToken(user.id);
     res.status(201).json({
       token,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        stats: user.stats
-      }
+      user: { id: user.id, username: user.username, email: user.email, stats: user.stats }
     });
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ error: 'Server error during registration' });
   }
-}
+});
 
 // POST /api/auth/login
-async function login(req, res) {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -128,29 +120,19 @@ async function login(req, res) {
     const token = generateToken(foundUser.id);
     res.json({
       token,
-      user: {
-        id: foundUser.id,
-        username: foundUser.username,
-        email: foundUser.email,
-        stats: foundUser.stats
-      }
+      user: { id: foundUser.id, username: foundUser.username, email: foundUser.email, stats: foundUser.stats }
     });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Server error during login' });
   }
-}
+});
 
 // GET /api/auth/me
-function me(req, res) {
+router.get('/me', authMiddleware, (req, res) => {
   res.json({
-    user: {
-      id: req.user.id,
-      username: req.user.username,
-      email: req.user.email,
-      stats: req.user.stats
-    }
+    user: { id: req.user.id, username: req.user.username, email: req.user.email, stats: req.user.stats }
   });
-}
+});
 
-module.exports = { authMiddleware, register, login, me, users, generateToken, JWT_SECRET };
+module.exports = { router, authMiddleware, users, generateToken, JWT_SECRET };

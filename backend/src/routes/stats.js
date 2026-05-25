@@ -1,7 +1,10 @@
+const express = require('express');
 const { authMiddleware, users } = require('./auth');
 
+const router = express.Router();
+
 // GET /api/stats/leaderboard
-function leaderboard(req, res) {
+router.get('/leaderboard', (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
     const allUsers = Array.from(users.values())
@@ -27,10 +30,10 @@ function leaderboard(req, res) {
     console.error('Leaderboard error:', err);
     res.status(500).json({ error: 'Failed to fetch leaderboard' });
   }
-}
+});
 
 // GET /api/stats/profile
-function profile(req, res) {
+router.get('/profile', authMiddleware, (req, res) => {
   try {
     res.json({
       user: {
@@ -44,6 +47,6 @@ function profile(req, res) {
     console.error('Profile error:', err);
     res.status(500).json({ error: 'Failed to fetch profile' });
   }
-}
+});
 
-module.exports = { leaderboard, profile, authMiddleware };
+module.exports = { router, authMiddleware };
