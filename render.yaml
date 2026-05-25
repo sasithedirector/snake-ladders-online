@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: snake-ladders-online
+    env: node
+    plan: free
+    rootDir: .
+    buildCommand: npm run render-build
+    startCommand: cd backend && node src/server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false

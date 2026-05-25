@@ -18,7 +18,7 @@ const server = http.createServer(app);
 // Socket.IO setup with CORS
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || '*',
     methods: ['GET', 'POST'],
     credentials: true
   },
@@ -28,7 +28,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: process.env.CLIENT_URL || '*',
   credentials: true
 }));
 app.use(express.json());
@@ -52,7 +52,8 @@ app.get('/api/health', (req, res) => {
 if (process.env.NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '..', 'frontend', 'dist');
   app.use(express.static(frontendPath));
-  app.get('*', (req, res) => {
+  // Don't interfere with API routes
+  app.get(/^\/(?!api|socket\.io).*/, (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
   });
 }
