@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
-const { getBoardData } = require('./engine');
+const { getBoardData } = require('../game/engine');
 const { users, JWT_SECRET } = require('../routes/auth');
 const {
   createRoom, getRoom, getRoomByInviteCode, getRoomBySocketId,
   deleteRoom, getPublicRooms, cleanupStaleRooms, playerSocketMap
-} = require('./roomManager');
+} = require('../game/roomManager');
 
 function authenticateSocket(token) {
   try {
